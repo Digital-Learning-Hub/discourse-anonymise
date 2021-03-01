@@ -40,7 +40,7 @@ module DiscourseAnonymousModerators
     end
 
     def self.acceptable_parent?(user)
-      return false if !user.staff?
+      ##return false if !user.staff?
       return false if Link.exists?(user: user) # Is already a child
       true
     end
@@ -74,6 +74,14 @@ module DiscourseAnonymousModerators
           email_digests: false
         )
 
+        groups = GroupUser.where(user_id: user.id).pluck(:group_id)
+        child_groups = GroupUser.where(user_id: child.id).pluck(:group_id)
+        groups.each do |element|
+          unless child_groups.include? element
+            GroupUser.create!(user_id: child.id, group_id: element)
+          end
+        end
+
         Link.create!(user: child, parent_user: user, last_used_at: Time.zone.now)
       end
     end
@@ -89,7 +97,6 @@ module DiscourseAnonymousModerators
         active: true,
         trust_level: 1,
         manual_locked_trust_level: 1,
-        moderator: true,
         approved: true
       }
       params.merge!(username: username) unless child
