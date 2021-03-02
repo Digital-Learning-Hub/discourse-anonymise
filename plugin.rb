@@ -36,10 +36,10 @@ after_initialize do
   end
 
   # TODO Drop after Discourse 2.6.0 release
-  if respond_to?(:allow_staff_user_custom_field)
-    allow_staff_user_custom_field(:parent_user_username)
+  if respond_to?(:allow_public_user_custom_field)
+    allow_public_user_custom_field(:parent_user_username)
   else
-    whitelist_staff_user_custom_field(:parent_user_username)
+    whitelist_public_user_custom_field(:parent_user_username)
   end
 
   module ModifyUserEmail

@@ -14,7 +14,7 @@ export default Ember.Component.extend({
 
   @computed("username")
   shouldDisplay(username) {
-    return this.get("currentUser.staff") && username;
+    return this.get("currentUser.trust_level") === 4 && username;
   },
 
   @computed("username")
